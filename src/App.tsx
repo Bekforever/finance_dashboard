@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { TransactionProvider, useTransactionContext } from "./app/providers/TransactionContext";
+import { FilterProvider } from "./app/providers/FilterContext";
+import { NavigationProvider, useNavigationContext } from "./app/providers/NavigationContext";
+import { GlobalStyles } from "./app/styles/GlobalStyles";
+import { LoadingScreen } from "./shared/ui/LoadingScreen";
+import { Header } from "./widgets/header/ui/Header";
+import { OverviewPage } from "./pages/overview/ui/OverviewPage";
+import { AnalyticsPage } from "./pages/analytics/ui/AnalyticsPage";
+import { CategoriesPage } from "./pages/categories/ui/CategoriesPage";
+import { HistoryPage } from "./pages/history/ui/HistoryPage";
+import { C } from "./shared/lib/theme";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function AppContent() {
+  const { page } = useNavigationContext();
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      style={{
+        background: C.bg,
+        minHeight: "100vh",
+        color: C.text,
+        fontFamily: "'Outfit','DM Sans',sans-serif",
+      }}
+    >
+      <GlobalStyles />
+      <Header />
+      <div style={{ padding: "24px 28px", maxWidth: 1400, margin: "0 auto" }}>
+        {page === "overview"   && <OverviewPage />}
+        {page === "analytics"  && <AnalyticsPage />}
+        {page === "categories" && <CategoriesPage />}
+        {page === "history"    && <HistoryPage />}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+function AppInner() {
+  const { data, loading } = useTransactionContext();
+  if (loading) return <LoadingScreen />;
+  return (
+    <FilterProvider data={data}>
+      <NavigationProvider>
+        <AppContent />
+      </NavigationProvider>
+    </FilterProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <TransactionProvider>
+      <AppInner />
+    </TransactionProvider>
+  );
+}
