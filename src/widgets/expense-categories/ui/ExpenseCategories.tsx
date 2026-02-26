@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Card } from "../../../shared/ui/Card";
 import { SectionTitle } from "../../../shared/ui/SectionTitle";
 import { fmt } from "../../../shared/lib/formatters";
@@ -33,7 +33,7 @@ export function ExpenseCategories({ expCats, totalExpense }: ExpenseCategoriesPr
               ))}
             </Pie>
             <Tooltip
-              formatter={(v: number) => fmt(v)}
+              formatter={(v: number | undefined) => fmt(v ?? 0)}
               contentStyle={{ background: C.card, border: `1px solid ${C.border2}`, borderRadius: 8, color: C.text }}
             />
           </PieChart>

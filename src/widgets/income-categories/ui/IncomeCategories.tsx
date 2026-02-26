@@ -33,7 +33,7 @@ export function IncomeCategories({ incCats }: IncomeCategoriesProps) {
             width={90}
           />
           <Tooltip
-            formatter={(v: number) => fmt(v)}
+            formatter={(v: number | undefined) => fmt(v ?? 0)}
             contentStyle={{ background: C.card, border: `1px solid ${C.border2}`, borderRadius: 8, color: C.text }}
           />
           <Bar dataKey="value" name="Доход" radius={[0, 6, 6, 0]}>
