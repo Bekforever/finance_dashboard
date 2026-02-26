@@ -21,10 +21,12 @@ export function TransactionsTable({ recent, totalRows, income, expense }: Transa
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          flexWrap: "wrap",
+          gap: 8,
         }}
       >
         <SectionTitle>История операций</SectionTitle>
-        <div style={{ display: "flex", gap: 20, fontSize: 12, fontFamily: "monospace" }}>
+        <div style={{ display: "flex", gap: 16, fontSize: 12, fontFamily: "monospace", flexWrap: "wrap" }}>
           <span style={{ color: C.textDim }}>
             Всего: <span style={{ color: C.text }}>{totalRows}</span>
           </span>
@@ -32,70 +34,74 @@ export function TransactionsTable({ recent, totalRows, income, expense }: Transa
           <span style={{ color: C.red }}>− {fmt(expense)}</span>
         </div>
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ background: C.surface }}>
-            {["Дата", "Тип", "Категория", "Сумма", "Комментарий"].map((h) => (
-              <th
-                key={h}
-                style={{
-                  padding: "10px 20px",
-                  textAlign: "left",
-                  color: C.textDim,
-                  fontSize: 9,
-                  fontFamily: "monospace",
-                  letterSpacing: 1.5,
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                }}
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {recent.map((r, i) => (
-            <tr
-              key={i}
-              className="rh"
-              style={{ borderBottom: `1px solid ${C.border}`, transition: "background .1s" }}
-            >
-              <td style={{ padding: "12px 20px", fontFamily: "monospace", fontSize: 11, color: C.textDim }}>
-                {r.date}
-              </td>
-              <td style={{ padding: "12px 20px" }}>
-                <span
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
+        <table style={{ width: "100%", minWidth: 480, borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: C.surface }}>
+              {["Дата", "Тип", "Категория", "Сумма", "Комментарий"].map((h) => (
+                <th
+                  key={h}
                   style={{
-                    background: r.type === "Доход" ? C.greenDim : C.redDim,
-                    color: r.type === "Доход" ? C.green : C.red,
-                    borderRadius: 6,
-                    padding: "3px 10px",
-                    fontSize: 11,
+                    padding: "10px 16px",
+                    textAlign: "left",
+                    color: C.textDim,
+                    fontSize: 9,
+                    fontFamily: "monospace",
+                    letterSpacing: 1.5,
+                    textTransform: "uppercase",
                     fontWeight: 600,
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  {r.type}
-                </span>
-              </td>
-              <td style={{ padding: "12px 20px", fontSize: 13 }}>{r.cat}</td>
-              <td
-                style={{
-                  padding: "12px 20px",
-                  fontFamily: "monospace",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: r.type === "Доход" ? C.green : C.red,
-                }}
-              >
-                {r.type === "Расход" ? "−" : "+"}
-                {fmt(r.amt)}
-              </td>
-              <td style={{ padding: "12px 20px", fontSize: 12, color: C.textDim }}>{r.note || "—"}</td>
+                  {h}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {recent.map((r, i) => (
+              <tr
+                key={i}
+                className="rh"
+                style={{ borderBottom: `1px solid ${C.border}`, transition: "background .1s" }}
+              >
+                <td style={{ padding: "12px 16px", fontFamily: "monospace", fontSize: 11, color: C.textDim, whiteSpace: "nowrap" }}>
+                  {r.date}
+                </td>
+                <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                  <span
+                    style={{
+                      background: r.type === "Доход" ? C.greenDim : C.redDim,
+                      color: r.type === "Доход" ? C.green : C.red,
+                      borderRadius: 6,
+                      padding: "3px 10px",
+                      fontSize: 11,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {r.type}
+                  </span>
+                </td>
+                <td style={{ padding: "12px 16px", fontSize: 13 }}>{r.cat}</td>
+                <td
+                  style={{
+                    padding: "12px 16px",
+                    fontFamily: "monospace",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: r.type === "Доход" ? C.green : C.red,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {r.type === "Расход" ? "−" : "+"}
+                  {fmt(r.amt)}
+                </td>
+                <td style={{ padding: "12px 16px", fontSize: 12, color: C.textDim }}>{r.note || "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }

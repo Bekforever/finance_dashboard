@@ -1,6 +1,7 @@
 import { useTransactionContext } from "../../../app/providers/TransactionContext";
 import { useFilterContext } from "../../../app/providers/FilterContext";
 import { useTransactionStats } from "../../../entities/transaction/model/useTransactionStats";
+import { useIsMobile } from "../../../shared/lib/useIsMobile";
 import { KpiGrid } from "../../../widgets/kpi-grid/ui/KpiGrid";
 import { IncomeExpenseChart } from "../../../widgets/income-expense-chart/ui/IncomeExpenseChart";
 import { SavingsCard } from "../../../widgets/savings-card/ui/SavingsCard";
@@ -11,6 +12,7 @@ export function OverviewPage() {
   const { data } = useTransactionContext();
   const { rows } = useFilterContext();
   const stats = useTransactionStats(rows, data);
+  const isMobile = useIsMobile();
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -26,7 +28,7 @@ export function OverviewPage() {
         maxExpRow={stats.maxExpRow}
       />
 
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr", gap: 18 }}>
         <IncomeExpenseChart monthly={stats.monthly} />
         <SavingsCard
           savingsRate={stats.savingsRate}
@@ -36,7 +38,7 @@ export function OverviewPage() {
         />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "3fr 2fr", gap: 18 }}>
         <CumulativeChart cumulative={stats.cumulative} />
         <TopExpenses topExp={stats.topExp} maxExp={stats.maxExp} />
       </div>

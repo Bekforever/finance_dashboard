@@ -2,6 +2,7 @@ import { Card } from "../../../shared/ui/Card";
 import { Sparkline } from "../../../shared/ui/Sparkline";
 import { fmt } from "../../../shared/lib/formatters";
 import { C } from "../../../shared/lib/theme";
+import { useIsMobile } from "../../../shared/lib/useIsMobile";
 
 interface SparklineRowProps {
   sparkInc: { v: number }[];
@@ -13,6 +14,7 @@ interface SparklineRowProps {
 }
 
 export function SparklineRow({ sparkInc, sparkExp, sparkPro, income, expense, profit }: SparklineRowProps) {
+  const isMobile = useIsMobile();
   const items = [
     { label: "Доходы по месяцам",  data: sparkInc, color: C.green, total: fmt(income) },
     { label: "Расходы по месяцам", data: sparkExp, color: C.red,   total: fmt(expense) },
@@ -20,7 +22,13 @@ export function SparklineRow({ sparkInc, sparkExp, sparkPro, income, expense, pr
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)",
+        gap: 14,
+      }}
+    >
       {items.map((s, i) => (
         <Card key={i} style={{ padding: "18px 22px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>

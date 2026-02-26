@@ -4,6 +4,7 @@ import { SectionTitle } from "../../../shared/ui/SectionTitle";
 import { fmt } from "../../../shared/lib/formatters";
 import { C } from "../../../shared/lib/theme";
 import { CHART_COLORS } from "../../../shared/config";
+import { useIsMobile } from "../../../shared/lib/useIsMobile";
 import type { CatData } from "../../../entities/transaction/model/types";
 
 interface ExpenseCategoriesProps {
@@ -12,10 +13,18 @@ interface ExpenseCategoriesProps {
 }
 
 export function ExpenseCategories({ expCats, totalExpense }: ExpenseCategoriesProps) {
+  const isMobile = useIsMobile();
   return (
     <Card style={{ padding: "22px 24px" }}>
       <SectionTitle>Расходы по категориям</SectionTitle>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, alignItems: "center" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: 12,
+          alignItems: "center",
+        }}
+      >
         <ResponsiveContainer width="100%" height={190}>
           <PieChart>
             <Pie

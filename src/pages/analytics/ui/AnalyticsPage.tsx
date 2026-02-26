@@ -1,6 +1,7 @@
 import { useTransactionContext } from "../../../app/providers/TransactionContext";
 import { useFilterContext } from "../../../app/providers/FilterContext";
 import { useTransactionStats } from "../../../entities/transaction/model/useTransactionStats";
+import { useIsMobile } from "../../../shared/lib/useIsMobile";
 import { SparklineRow } from "../../../widgets/sparklines-row/ui/SparklineRow";
 import { ProfitBarChart } from "../../../widgets/profit-bar-chart/ui/ProfitBarChart";
 import { WeekdayChart } from "../../../widgets/weekday-chart/ui/WeekdayChart";
@@ -10,6 +11,7 @@ export function AnalyticsPage() {
   const { data } = useTransactionContext();
   const { rows } = useFilterContext();
   const stats = useTransactionStats(rows, data);
+  const isMobile = useIsMobile();
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -22,7 +24,7 @@ export function AnalyticsPage() {
         profit={stats.profit}
       />
 
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "3fr 2fr", gap: 18 }}>
         <ProfitBarChart monthly={stats.monthly} />
         <WeekdayChart byWeekday={stats.byWeekday} />
       </div>
