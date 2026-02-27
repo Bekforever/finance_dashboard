@@ -1,5 +1,4 @@
-export const SHEET_CSV_URL =
-	'https://docs.google.com/spreadsheets/d/e/2PACX-1vRRWNdnP0Dt5YGPIRCyOjTXedAYgov-jtz6nsemX2otFbE5Tluqs_Zic71qL-GMIaCBhkhi0MIfdMRh/pub?gid=1331443964&single=true&output=csv'
+export const SHEET_CSV_URL = import.meta.env.VITE_SHEET_CSV_URL as string
 
 export const CHART_COLORS = [
 	'#10F5A0',
