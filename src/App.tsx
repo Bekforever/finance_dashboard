@@ -1,6 +1,7 @@
+import { Routes, Route, Navigate } from "react-router-dom";
 import { TransactionProvider, useTransactionContext } from "./app/providers/TransactionContext";
 import { FilterProvider } from "./app/providers/FilterContext";
-import { NavigationProvider, useNavigationContext } from "./app/providers/NavigationContext";
+import { NavigationProvider } from "./app/providers/NavigationContext";
 import { GlobalStyles } from "./app/styles/GlobalStyles";
 import { LoadingScreen } from "./shared/ui/LoadingScreen";
 import { Header } from "./widgets/header/ui/Header";
@@ -13,7 +14,6 @@ import { useIsMobile } from "./shared/lib/useIsMobile";
 import { C } from "./shared/lib/theme";
 
 function AppContent() {
-  const { page } = useNavigationContext();
   const isMobile = useIsMobile();
   return (
     <div
@@ -34,10 +34,14 @@ function AppContent() {
           paddingBottom: isMobile ? 80 : undefined,
         }}
       >
-        {page === "overview"   && <OverviewPage />}
-        {page === "analytics"  && <AnalyticsPage />}
-        {page === "categories" && <CategoriesPage />}
-        {page === "history"    && <HistoryPage />}
+        <Routes>
+          <Route path="/" element={<Navigate to="/overview" replace />} />
+          <Route path="/overview" element={<OverviewPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="*" element={<Navigate to="/overview" replace />} />
+        </Routes>
       </div>
       {isMobile && <BottomNav />}
     </div>
