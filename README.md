@@ -1,73 +1,108 @@
-# React + TypeScript + Vite
+# Finance Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Персональный дашборд для отслеживания и анализа финансов — доходов, расходов, категорий и трендов.
 
-Currently, two official plugins are available:
+## Возможности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Обзор** — ключевые показатели (KPI): суммарный доход, расходы, прибыль, норма сбережений
+- **Аналитика** — графики доходов/расходов по месяцам, кумулятивный баланс, расходы по дням недели
+- **Категории** — разбивка доходов и расходов по категориям
+- **История** — таблица всех транзакций с фильтрацией по месяцу
+- Адаптивный интерфейс для мобильных устройств и десктопа
 
-## React Compiler
+## Стек технологий
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Инструмент | Описание |
+|---|---|
+| React 19 + TypeScript | UI и типизация |
+| Vite 7 | Сборка и dev-сервер |
+| React Router 7 | Клиентская маршрутизация (SPA) |
+| Recharts 3 | Интерактивные графики |
+| pnpm | Менеджер пакетов |
 
-## Expanding the ESLint configuration
+## Быстрый старт
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Требования
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js 18+
+- pnpm
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Установка
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Клонировать репозиторий
+git clone <repo-url>
+cd finance_dashboard
+
+# Установить зависимости
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Настройка источника данных
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Приложение может загружать транзакции из **Google Таблицы** (публичная CSV-ссылка) или работать с встроенными демо-данными.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Скопируй файл переменных окружения:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Укажи ссылку на CSV-экспорт Google Таблицы:
+   ```env
+   VITE_SHEET_CSV_URL=https://docs.google.com/spreadsheets/d/.../export?format=csv
+   ```
+
+   > Если переменная не задана, приложение запустится с демо-данными.
+
+### Запуск
+
+```bash
+# Режим разработки (http://localhost:5173)
+pnpm dev
+
+# Сборка для продакшена
+pnpm build
+
+# Предпросмотр продакшен-сборки
+pnpm preview
+
+# Линтинг
+pnpm lint
 ```
+
+## Структура проекта
+
+Проект следует архитектуре **Feature-Sliced Design (FSD)**:
+
+```
+src/
+├── app/          # Провайдеры (контексты), глобальные стили
+├── entities/     # Бизнес-логика: загрузка данных, парсинг CSV, вычисление статистики
+├── features/     # Независимые фичи: фильтр по месяцу, навигация
+├── pages/        # Страницы: Overview, Analytics, Categories, History
+├── shared/       # Переиспользуемые компоненты, утилиты, конфиги
+└── widgets/      # Составные виджеты: графики, таблицы, KPI-сетка
+```
+
+## Формат данных
+
+Таблица Google Sheets должна содержать следующие столбцы:
+
+| Столбец | Описание | Пример |
+|---|---|---|
+| `date` | Дата транзакции | `15.01.2026` |
+| `type` | Тип: `income` или `expense` | `expense` |
+| `category` | Категория | `Продукты` |
+| `amount` | Сумма (число) | `3500` |
+| `note` | Комментарий (необязательно) | `Пятёрочка` |
+
+## Деплой
+
+Проект готов к деплою на **Vercel**: файл `vercel.json` настроен для SPA-маршрутизации.
+
+```bash
+# Через Vercel CLI
+vercel deploy
+```
+
+Либо подключи репозиторий в Vercel — сборка запустится автоматически.
