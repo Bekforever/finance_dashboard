@@ -22,7 +22,7 @@ function RefreshButton({ loading, refetch }: { loading: boolean; refetch: () => 
         width: 32,
         height: 32,
         padding: 0,
-        color: loading ? C.textMuted : C.textBold,
+        color: loading ? C.textDim : C.textBold,
         flexShrink: 0,
         transition: "border-color 0.15s, color 0.15s",
       }}
