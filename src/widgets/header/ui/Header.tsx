@@ -3,9 +3,55 @@ import { MonthFilter } from "../../../features/month-filter/ui/MonthFilter";
 import { C } from "../../../shared/lib/theme";
 import { SHEET_CSV_URL } from "../../../shared/config";
 import { useIsMobile } from "../../../shared/lib/useIsMobile";
+import { useTransactionContext } from "../../../app/providers/TransactionContext";
+
+function RefreshButton({ loading, refetch }: { loading: boolean; refetch: () => void }) {
+  return (
+    <button
+      onClick={refetch}
+      disabled={loading}
+      title="Обновить данные"
+      style={{
+        background: "none",
+        border: `1px solid ${C.border}`,
+        borderRadius: 8,
+        cursor: loading ? "not-allowed" : "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 32,
+        height: 32,
+        padding: 0,
+        color: loading ? C.textMuted : C.textBold,
+        flexShrink: 0,
+        transition: "border-color 0.15s, color 0.15s",
+      }}
+    >
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{
+          animation: loading ? "spin 0.8s linear infinite" : "none",
+        }}
+      >
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <polyline points="23 4 23 10 17 10" />
+        <polyline points="1 20 1 14 7 14" />
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+      </svg>
+    </button>
+  );
+}
 
 export function Header() {
   const isMobile = useIsMobile();
+  const { loading, refetch } = useTransactionContext();
 
   if (isMobile) {
     return (
@@ -48,7 +94,10 @@ export function Header() {
             Finance_2026
           </div>
         </div>
-        <MonthFilter />
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <MonthFilter />
+          <RefreshButton loading={loading} refetch={refetch} />
+        </div>
       </div>
     );
   }
@@ -109,7 +158,10 @@ export function Header() {
       </div>
 
       <PageNavigation />
-      <MonthFilter />
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <MonthFilter />
+        <RefreshButton loading={loading} refetch={refetch} />
+      </div>
     </div>
   );
 }
