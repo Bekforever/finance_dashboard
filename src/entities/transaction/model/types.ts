@@ -1,5 +1,6 @@
 export interface Row {
   date: string;
+  time?: string;
   type: string;
   cat: string;
   amt: number;

@@ -36,7 +36,7 @@ export function TopExpenses({ topExp, maxExp }: TopExpensesProps) {
                 />
               </div>
               <div style={{ fontSize: 9, color: C.textDim, marginTop: 2 }}>
-                {r.date} · {r.note || r.cat}
+                {r.date}{r.time ? ` ${r.time}` : ""} · {r.note || r.cat}
               </div>
             </div>
           </div>
