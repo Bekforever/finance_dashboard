@@ -1,13 +1,17 @@
 import type { Row } from "../model/types";
 
-function normalizeDate(raw: string): string {
-  // "23.02.2026 10:51:15" → "2026-02-23"
-  const datePart = raw.split(" ")[0];
+function parseDatetime(raw: string): { date: string; time?: string } {
+  // "23.02.2026 10:51:15" → { date: "2026-02-23", time: "10:51" }
+  const [datePart, timePart] = raw.split(" ");
+  let date: string;
   if (datePart.includes(".")) {
     const [d, m, y] = datePart.split(".");
-    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+    date = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  } else {
+    date = datePart; // уже YYYY-MM-DD
   }
-  return datePart; // уже YYYY-MM-DD
+  const time = timePart ? timePart.slice(0, 5) : undefined;
+  return { date, time };
 }
 
 export function parseCSV(text: string): Row[] {
@@ -17,8 +21,10 @@ export function parseCSV(text: string): Row[] {
     .slice(1)
     .map((line) => {
       const c = line.split(",").map((x) => x.trim().replace(/^"|"$/g, ""));
+      const { date, time } = parseDatetime(c[0]);
       return {
-        date: normalizeDate(c[0]),
+        date,
+        time,
         type: c[1],
         cat: c[2],
         amt: parseFloat(c[3]) || 0,

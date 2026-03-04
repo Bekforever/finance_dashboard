@@ -67,6 +67,9 @@ export function TransactionsTable({ recent, totalRows, income, expense }: Transa
               >
                 <td style={{ padding: "12px 16px", fontFamily: "monospace", fontSize: 11, color: C.textDim, whiteSpace: "nowrap" }}>
                   {r.date}
+                  {r.time && (
+                    <span style={{ color: C.textDim, fontSize: 9, opacity: 0.7 }}>{" "}{r.time}</span>
+                  )}
                 </td>
                 <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                   <span
